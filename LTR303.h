@@ -2,6 +2,8 @@
 	LTR303 illumination sensor library for Arduino
 	Lovelesh, thingTronics
 	
+	MODIFIED to work better by Neil Emiro, Sep 2019
+	
 The MIT License (MIT)
 
 Copyright (c) 2015 thingTronics Limited
@@ -39,10 +41,17 @@ version 0.1
 #define LTR303_MEAS_RATE     0x85
 #define LTR303_PART_ID       0x86
 #define LTR303_MANUFAC_ID    0x87
+
 #define LTR303_DATA_CH1_0    0x88
 #define LTR303_DATA_CH1_1    0x89
 #define LTR303_DATA_CH0_0    0x8A
 #define LTR303_DATA_CH0_1    0x8B
+/*
+#define LTR303_DATA_CH0_0    0x88
+#define LTR303_DATA_CH0_1    0x89
+#define LTR303_DATA_CH1_0    0x8A
+#define LTR303_DATA_CH1_1    0x8B
+*/
 #define LTR303_STATUS		 0x8C
 #define LTR303_INTERRUPT     0x8F
 #define LTR303_THRES_UP_0    0x97
@@ -284,7 +293,7 @@ class LTR303 {
 			// Returns true (1) if successful, false (0) if there was an I2C error
 			// (Also see getError() below)
 		
-		boolean getLux(byte gain, byte integrationTime, unsigned int CH0, unsigned int CH1, double &lux);
+		boolean getLux(byte gain, unsigned char IntTime, unsigned int CH0, unsigned int CH1, double &lux);
 			// Convert raw data to lux
 			// gain: 0 (1X) or 7 (96X), see getControl()
 			// integrationTime: integration time in ms, from getMeasurementRate()
