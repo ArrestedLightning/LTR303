@@ -19,7 +19,8 @@ Any Arduino        "SDA"  "SCL"
 Uno, Pro            A4     A5
 Mega2560, Due       20     21
 Leonardo            2      3
-ESP8266				5      4
+ESP8266		      		5      4
+
 
 You can connect the INT (interrupt) pin  but it is not required for basic operation.
 
@@ -29,8 +30,15 @@ You can connect the INT (interrupt) pin  but it is not required for basic operat
 // (Wire is a standard library included with Arduino):
 
 #include <LTR303.h>
-#include <Wire.h>
+#include <i2c_t3.h>  //use this for PJRC Teensy
+//#include <wire.h>  //use this for most Arduinos
 
+
+
+#define LED1 13
+
+
+//=========================================================================
 // Create an LTR303 object, here called "light":
 
 LTR303 light;
@@ -40,11 +48,26 @@ LTR303 light;
 unsigned char gain;     // Gain setting, values = 0-7 
 unsigned char integrationTime;  // Integration ("shutter") time in milliseconds
 unsigned char measurementRate;  // Interval between DATA_REGISTERS update
+unsigned char intTime = 0;
+unsigned char Rate = 0;
+
 
 void setup() {
   // Initialize the Serial port:
+  pinMode(LED1, OUTPUT);
+  pinMode(LED2, OUTPUT);
+  digitalWrite(LED1, LOW);
+  digitalWrite(LED2, LOW);
+
+  pinMode(OLED_RESET, OUTPUT);
+  digitalWrite(OLED_RESET, LOW);
+
+  pinMode(PIN_ALS_INT, INPUT);
+
   
+  delay(100);
   Serial.begin(9600);
+  delay(100);
   Serial.println("LTR303-ALS example sketch");
 
   // Initialize the LTR303 library
@@ -56,7 +79,6 @@ void setup() {
 
   // Get factory ID from sensor:
   // (Just for fun, you don't need to do this to operate the sensor)
-
   unsigned char ID;
   
   if (light.getPartID(ID)) {
@@ -99,19 +121,20 @@ void setup() {
   // If integrationTime = 6, integrationTime will be 300ms
   // If integrationTime = 7, integrationTime will be 350ms
 
-  unsigned char time = 1;
+  intTime = 1;
 
-  // If integrationTime = 0, integrationTime will be 100ms (default)
-  // If integrationTime = 1, integrationTime will be 50ms
-  // If integrationTime = 2, integrationTime will be 200ms
-  // If integrationTime = 3, integrationTime will be 400ms
-  // If integrationTime = 4, integrationTime will be 150ms
-  // If integrationTime = 5, integrationTime will be 250ms
-  // If integrationTime = 6, integrationTime will be 300ms
-  // If integrationTime = 7, integrationTime will be 350ms
+  // If measurementRate = 0, measurementRate will be 50ms
+  // If measurementRate = 1, measurementRate will be 100ms
+  // If measurementRate = 2, measurementRate will be 200ms
+  // If measurementRate = 3, measurementRate will be 500ms (default)
+  // If measurementRate = 4, measurementRate will be 1000ms
+  // If measurementRate = 5, measurementRate will be 2000ms
+  // If measurementRate = 6, measurementRate will be 2000ms
+  // If measurementRate = 7, measurementRate will be 2000ms
+  Rate = 3;
   
   Serial.println("Set timing...");
-  light.setMeasurementRate(time,3);
+  light.setMeasurementRate(intTime,Rate);
 
   // To start taking measurements, power up the sensor:
   
@@ -123,6 +146,7 @@ void setup() {
   // Once a measurement occurs, another integration period will start.
 }
 
+
 void loop() {
   // Wait between measurements before retrieving the result
   // You can also configure the sensor to issue an interrupt 
@@ -130,20 +154,16 @@ void loop() {
   
   // This sketch uses the LTR303's built-in integration timer.
   
-  int ms = 1000;
-  
-  delay(ms);
+ 
   
   
   // Once integration is complete, we'll retrieve the data.
   
   // There are two light sensors on the device, one for visible light
   // and one for infrared. Both sensors are needed for lux calculations.
-  
-  // Retrieve the data from the device:
 
-  unsigned int data0, data1;
   
+  unsigned int data0, data1;
   if (light.getData(data0,data1)) {
     // getData() returned true, communication was successful
     
@@ -165,7 +185,7 @@ void loop() {
     
     // Perform lux calculation:
 
-    good = light.getLux(gain,integrationTime,data0,data1,lux);
+    good = light.getLux(gain,intTime,data0,data1,lux);
     
     // Print out the results:
 	
@@ -179,6 +199,9 @@ void loop() {
     byte error = light.getError();
     printError(error);
   }
+
+  int ms = 1000;
+  delay(ms); 
 }
 
 void printError(byte error) {
