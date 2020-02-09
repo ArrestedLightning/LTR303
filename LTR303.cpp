@@ -50,7 +50,7 @@ boolean LTR303::setPowerUp(void) {
 	// Returns true (1) if successful, false (0) if there was an I2C error
 	// (Also see getError() below)
 
-	// Write 0x01 (reset = 0 & mode = 1) to command byte (power on)
+	// Write 0x01 (reset = 0 & mode = 1) to command byte (power on/active)
 	return(writeByte(LTR303_CONTR,0x01));
 }
 
@@ -59,7 +59,7 @@ boolean LTR303::setPowerDown(void) {
 	// Returns true (1) if successful, false (0) if there was an I2C error
 	// (Also see getError() below)
 
-	// Clear command byte (reset = 0 & mode = 0)(power off)
+	// Clear command byte (reset = 0 & mode = 0)(power off/standby)
 	return(writeByte(LTR303_CONTR,0x00));
 }
 
@@ -250,11 +250,16 @@ boolean LTR303::getData(unsigned int &CH0, unsigned int &CH1) {
 	// Default value of both channels is 0x00
 	// Returns true (1) if successful, false (0) if there was an I2C error
 	// (Also see getError() below)
+	// NOTE: Order matters: datasheet says you *must* read channel 1
+	// (0x88/0x89) before channel 0. If you try to alter this ordering,
+	// the device will definitely fail to respond to reads.
 	
-	return(readUInt(LTR303_DATA_CH0_0,CH0) && readUInt(LTR303_DATA_CH1_0,CH1));
+	return(readUInt(LTR303_DATA_CH1_0,CH1) && readUInt(LTR303_DATA_CH0_0,CH0));
 }
 
-boolean LTR303::getStatus(boolean valid, byte &gain, boolean intrStatus, boolean dataStatus) {
+boolean LTR303::getStatus(boolean &valid, byte &gain,
+	boolean &intrStatus, boolean &dataStatus
+) {
 	// Gets the status information of LTR303
 	// Default value is 0x00
 	// If valid = false(0), Sensor data is valid (default)
@@ -438,7 +443,9 @@ boolean LTR303::getLux(byte gain, unsigned char IntTime, unsigned int CH0, unsig
 	
 	// Determine if either sensor saturated (0xFFFF)
 	// If so, abandon ship (calculation will not be accurate)
-	if ((CH0 == 0xFFFF) || (CH1 == 0xFFFF)) {
+	// If the channel values are both zero, we'll get a divide-by-zero
+	// situation.
+	if ((CH0==0 && CH1==0) && (CH0 == 0xFFFF) || (CH1 == 0xFFFF)) {
 		lux = 0.0;
 		return(false);
 	}
@@ -562,13 +569,19 @@ boolean LTR303::readByte(byte address, byte &value) {
 	// Read requested byte
 	if (_error == 0)
 	{
+		long timeout = millis() + 100;
+
 		Wire.requestFrom(_i2c_address,1);
-		if (Wire.available() == 1)
-		{
-			value = Wire.read();
-			return(true);
+		while( millis() < timeout ) {
+			if( Wire.available() < 1 ) {
+				delay(5);
+			} else {
+				value = Wire.read();
+				return(true);
+			}
 		}
-	}
+		_error = 4;
+	}	
 	return(false);
 }
 
@@ -607,15 +620,21 @@ boolean LTR303::readUInt(byte address, unsigned int &value) {
 	// Read two bytes (low and high)
 	if (_error == 0)
 	{
+		long timeout = millis() + 100;
+
 		Wire.requestFrom(_i2c_address,2);
-		if (Wire.available() == 2)
-		{
-			low = Wire.read();
-			high = Wire.read();
-			// Combine bytes into unsigned int
-			value = word(high,low);
-			return(true);
+		while( millis() < timeout ) {
+			if( Wire.available() < 2 ) {
+				delay(5);
+			} else {
+				low = Wire.read();
+				high = Wire.read();
+				// Combine bytes into unsigned int
+				value = word(high,low);
+				return(true);
+			}
 		}
+		_error = 4;
 	}	
 	return(false);
 }

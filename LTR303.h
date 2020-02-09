@@ -187,7 +187,8 @@ class LTR303 {
 			// Returns true (1) if successful, false (0) if there was an I2C error
 			// (Also see getError() below)
 		
-		boolean getStatus(boolean valid, byte &gain, boolean intrStatus, boolean dataStatus);
+		boolean getStatus(boolean &valid, byte &gain, boolean &intrStatus,
+				boolean &dataStatus);
 			// Gets the status information of LTR303
 			// Default value is 0x00
 			// If valid = false(0), Sensor data is valid (default)
