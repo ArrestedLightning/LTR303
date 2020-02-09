@@ -438,23 +438,19 @@ boolean LTR303::getLux(byte gain, unsigned char IntTime, unsigned int CH0, unsig
 	// returns true (1) if calculation was successful
 	// returns false (0) AND lux = 0.0 IF EITHER SENSOR WAS SATURATED (0XFFFF)
 
-	double ratio, ALS_INT;
+	double ratio = 0, ALS_INT;
 	int ALS_GAIN;
 	
 	// Determine if either sensor saturated (0xFFFF)
 	// If so, abandon ship (calculation will not be accurate)
-	// If the channel values are both zero, we'll get a divide-by-zero
-	// situation.
-	if ((CH0==0 && CH1==0) && (CH0 == 0xFFFF) || (CH1 == 0xFFFF)) {
+	if ((CH0 == 0xFFFF) || (CH1 == 0xFFFF)) {
 		lux = 0.0;
 		return(false);
 	}
 
-
-
-	// We will need the ratio for subsequent calculations
-	ratio = CH1 / (CH0 + CH1);
-
+	// We will need the ratio for subsequent calculations. Don't divide by
+	// zero though.
+	if( CH0 || CH1 ) ratio = CH1 / (CH0 + CH1);
 
   // Gain can take any value from 0-7, except 4 & 5
   // If gain = 4, invalid
