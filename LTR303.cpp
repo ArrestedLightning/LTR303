@@ -104,7 +104,7 @@ boolean LTR303::setControl(byte gain, boolean reset = false, boolean mode = fals
 	return(writeByte(LTR303_CONTR,control));
 }			
 			
-boolean LTR303::getControl(byte &gain, boolean reset, boolean mode) {
+boolean LTR303::getControl(byte &gain, boolean &reset, boolean &mode) {
 	// Gets the control register values
 	// Default value is 0x00
 	// If gain = 0, device is set to 1X gain (default)

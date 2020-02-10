@@ -97,7 +97,7 @@ class LTR303 {
 			// If mode = false(0), stand-by mode (default)
 			// If mode = true(1), active mode
 			
-		boolean getControl(byte &gain, boolean reset, boolean mode);
+		boolean getControl(byte &gain, boolean &reset, boolean &mode);
 			// Gets the control register values
 			// Default value is 0x00
 			// If gain = 0, device is set to 1X gain (default)
