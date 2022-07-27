@@ -65,21 +65,21 @@ class LTR303 {
 		LTR303(void);
 			// LTR303 object
 			
-		boolean begin(void);
+		bool begin(void);
 			// Initialize LTR303 library with default address (0x29)
 			// Always returns true
 		
-		boolean setPowerUp(void);
+		bool setPowerUp(void);
 			// Turn on LTR303, begin integration
 			// Returns true (1) if successful, false (0) if there was an I2C error
 			// (Also see getError() below)
 
-		boolean setPowerDown(void);
+		bool setPowerDown(void);
 			// Turn off LTR303
 			// Returns true (1) if successful, false (0) if there was an I2C error
 			// (Also see getError() below)
 
-		boolean setControl(byte gain, boolean reset, boolean mode);
+		bool setControl(byte gain, bool reset, bool mode);
 			// Sets the gain, SW reset and mode of LTR303
 			// Default value is 0x00
 			// If gain = 0, device is set to 1X gain (default)
@@ -97,7 +97,7 @@ class LTR303 {
 			// If mode = false(0), stand-by mode (default)
 			// If mode = true(1), active mode
 			
-		boolean getControl(byte &gain, boolean &reset, boolean &mode);
+		bool getControl(byte &gain, bool &reset, bool &mode);
 			// Gets the control register values
 			// Default value is 0x00
 			// If gain = 0, device is set to 1X gain (default)
@@ -118,7 +118,7 @@ class LTR303 {
 			// (Also see getError() below)
 			
 			
-		boolean setMeasurementRate(byte integrationTime, byte measurementRate);
+		bool setMeasurementRate(byte integrationTime, byte measurementRate);
 			// Sets the integration time and measurement rate of the sensor
 			// integrationTime is the measurement time for each ALs cycle
 			// measurementRate is the interval between DATA_REGISTERS update
@@ -144,7 +144,7 @@ class LTR303 {
 			// Returns true (1) if successful, false (0) if there was an I2C error
 			// (Also see getError() below)
 			
-		boolean getMeasurementRate(byte &integrationTime, byte &measurementRate);
+		bool getMeasurementRate(byte &integrationTime, byte &measurementRate);
 			// Gets the value of Measurement Rate register
 			// Default value is 0x03
 			// If integrationTime = 0, integrationTime will be 100ms (default)
@@ -167,7 +167,7 @@ class LTR303 {
 			// Returns true (1) if successful, false (0) if there was an I2C error
 			// (Also see getError() below)
 
-		boolean getPartID(byte &partID);
+		bool getPartID(byte &partID);
 			// Gets the part number ID and revision ID of the chip
 			// Default value is 0x0A
 			// part number ID = 0x0A (default)
@@ -175,20 +175,20 @@ class LTR303 {
 			// Returns true (1) if successful, false (0) if there was an I2C error
 			// (Also see getError() below)
 		
-		boolean getManufacID(byte &manufacID);
+		bool getManufacID(byte &manufacID);
 			// Gets the Manufacturers ID
 			// Default value is 0x05
 			// Returns true (1) if successful, false (0) if there was an I2C error
 			// (Also see getError() below)
 		
-		boolean getData(unsigned int &CH0, unsigned int &CH1);
+		bool getData(unsigned int &CH0, unsigned int &CH1);
 			// Gets the 16-bit channel 0 and channel 1 data
 			// Default value of both channels is 0x00
 			// Returns true (1) if successful, false (0) if there was an I2C error
 			// (Also see getError() below)
 		
-		boolean getStatus(boolean &valid, byte &gain, boolean &intrStatus,
-				boolean &dataStatus);
+		bool getStatus(bool &valid, byte &gain, bool &intrStatus,
+				bool &dataStatus);
 			// Gets the status information of LTR303
 			// Default value is 0x00
 			// If valid = false(0), Sensor data is valid (default)
@@ -211,7 +211,7 @@ class LTR303 {
 			// Returns true (1) if successful, false (0) if there was an I2C error
 			// (Also see getError() below)
 			
-		boolean setInterruptControl(boolean intrMode, boolean polarity);
+		bool setInterruptControl(bool intrMode, bool polarity);
 			// Sets up interrupt operations
 			// Default value is 0x08
 			// If intrMode = false(0), INT pin is inactive (default)
@@ -223,7 +223,7 @@ class LTR303 {
 			// Returns true (1) if successful, false (0) if there was an I2C error
 			// (Also see getError() below)
 			
-		boolean getInterruptControl(boolean polarity, boolean intrMode);
+		bool getInterruptControl(bool polarity, bool intrMode);
 			// Sets up interrupt operations
 			// Default value is 0x08
 			// If polarity = false(0), INT pin is active at logic 0 (default)
@@ -235,21 +235,21 @@ class LTR303 {
 			// Returns true (1) if successful, false (0) if there was an I2C error
 			// (Also see getError() below)
 			
-		boolean setThreshold(unsigned int upperLimit, unsigned int lowerLimit);
+		bool setThreshold(unsigned int upperLimit, unsigned int lowerLimit);
 			// Sets the upper limit and lower limit of the threshold
 			// Default value of upper threshold is 0xFF and lower threshold is 0x00
 			// Both the threshold are 16-bit integer values
 			// Returns true (1) if successful, false (0) if there was an I2C error
 			// (Also see getError() below)
 			
-		boolean getThreshold(unsigned int &upperLimit, unsigned int &lowerLimit);
+		bool getThreshold(unsigned int &upperLimit, unsigned int &lowerLimit);
 			// Gets the upper limit and lower limit of the threshold
 			// Default value of upper threshold is 0xFF and lower threshold is 0x00
 			// Both the threshold are 16-bit integer values
 			// Returns true (1) if successful, false (0) if there was an I2C error
 			// (Also see getError() below)
 			
-		boolean setIntrPersist(byte persist);
+		bool setIntrPersist(byte persist);
 			// Sets the interrupt persistance i.e. controls the N number of times the 
 			// measurement data is outside the range defined by upper and lower threshold
 			// Default value is 0x00
@@ -272,7 +272,7 @@ class LTR303 {
 			// Returns true (1) if successful, false (0) if there was an I2C error
 			// (Also see getError() below)
 			
-		boolean getIntrPersist(byte &persist);
+		bool getIntrPersist(byte &persist);
 			// Gets the interrupt persistance i.e. controls the N number of times the measurement data is outside the range defined by upper and lower threshold
 			// Default value is 0x00
 			// If persist = 0, every sensor value out of threshold range (default)
@@ -294,7 +294,7 @@ class LTR303 {
 			// Returns true (1) if successful, false (0) if there was an I2C error
 			// (Also see getError() below)
 		
-		boolean getLux(byte gain, unsigned char IntTime, unsigned int CH0, unsigned int CH1, double &lux);
+		bool getLux(byte gain, unsigned char IntTime, unsigned int CH0, unsigned int CH1, double &lux);
 			// Convert raw data to lux
 			// gain: 0 (1X) or 7 (96X), see getControl()
 			// integrationTime: integration time in ms, from getMeasurementRate()
@@ -314,28 +314,28 @@ class LTR303 {
 
 	private:
 
-		boolean readByte(byte address, byte &value);
+		bool readByte(byte address, byte &value);
 			// Reads a byte from a LTR303 address
 			// Address: LTR303 address (0 to 15)
 			// Value will be set to stored byte
 			// Returns true (1) if successful, false (0) if there was an I2C error
 			// (Also see getError() above)
 	
-		boolean writeByte(byte address, byte value);
+		bool writeByte(byte address, byte value);
 			// Write a byte to a LTR303 address
 			// Address: LTR303 address (0 to 15)
 			// Value: byte to write to address
 			// Returns true (1) if successful, false (0) if there was an I2C error
 			// (Also see getError() above)
 
-		boolean readUInt(byte address, unsigned int &value);
+		bool readUInt(byte address, unsigned int &value);
 			// Reads an unsigned integer (16 bits) from a LTR303 address (low byte first)
 			// Address: LTR303 address (0 to 15), low byte first
 			// Value will be set to stored unsigned integer
 			// Returns true (1) if successful, false (0) if there was an I2C error
 			// (Also see getError() above)
 
-		boolean writeUInt(byte address, unsigned int value);
+		bool writeUInt(byte address, unsigned int value);
 			// Write an unsigned integer (16 bits) to a LTR303 address (low byte first)
 			// Address: LTR303 address (0 to 15), low byte first
 			// Value: unsigned int to write to address

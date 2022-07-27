@@ -36,7 +36,7 @@ LTR303::LTR303(void) {
 	// LTR303 object
 }
 
-boolean LTR303::begin(void) {
+bool LTR303::begin(void) {
 	// Initialize LTR303 library with default address (0x39)
 	// Always returns true
 
@@ -45,7 +45,7 @@ boolean LTR303::begin(void) {
 	return(true);
 }
 
-boolean LTR303::setPowerUp(void) {
+bool LTR303::setPowerUp(void) {
 	// Turn on LTR303, begin integrations
 	// Returns true (1) if successful, false (0) if there was an I2C error
 	// (Also see getError() below)
@@ -54,7 +54,7 @@ boolean LTR303::setPowerUp(void) {
 	return(writeByte(LTR303_CONTR,0x01));
 }
 
-boolean LTR303::setPowerDown(void) {
+bool LTR303::setPowerDown(void) {
 	// Turn off LTR303
 	// Returns true (1) if successful, false (0) if there was an I2C error
 	// (Also see getError() below)
@@ -63,7 +63,7 @@ boolean LTR303::setPowerDown(void) {
 	return(writeByte(LTR303_CONTR,0x00));
 }
 
-boolean LTR303::setControl(byte gain, boolean reset = false, boolean mode = false) {
+bool LTR303::setControl(byte gain, bool reset = false, bool mode = false) {
 	// Sets the gain, SW reset and mode of LTR303
 	// Default value is 0x00
 	// If gain = 0, device is set to 1X gain (default)
@@ -104,7 +104,7 @@ boolean LTR303::setControl(byte gain, boolean reset = false, boolean mode = fals
 	return(writeByte(LTR303_CONTR,control));
 }			
 			
-boolean LTR303::getControl(byte &gain, boolean &reset, boolean &mode) {
+bool LTR303::getControl(byte &gain, bool &reset, bool &mode) {
 	// Gets the control register values
 	// Default value is 0x00
 	// If gain = 0, device is set to 1X gain (default)
@@ -143,7 +143,7 @@ boolean LTR303::getControl(byte &gain, boolean &reset, boolean &mode) {
 	return(false);
 }
 
-boolean LTR303::setMeasurementRate(byte integrationTime, byte measurementRate = 3) {
+bool LTR303::setMeasurementRate(byte integrationTime, byte measurementRate = 3) {
 	// Sets the integration time and measurement rate of the sensor
 	// integrationTime is the measurement time for each ALs cycle
 	// measurementRate is the interval between DATA_REGISTERS update
@@ -186,7 +186,7 @@ boolean LTR303::setMeasurementRate(byte integrationTime, byte measurementRate = 
 	return(writeByte(LTR303_MEAS_RATE, measurement));
 }
 
-boolean LTR303::getMeasurementRate(byte &integrationTime, byte &measurementRate) {
+bool LTR303::getMeasurementRate(byte &integrationTime, byte &measurementRate) {
 	// Gets the value of Measurement Rate register
 	// Default value is 0x03
 	// If integrationTime = 0, integrationTime will be 100ms (default)
@@ -225,7 +225,7 @@ boolean LTR303::getMeasurementRate(byte &integrationTime, byte &measurementRate)
 	return(false);		
 }
 
-boolean LTR303::getPartID(byte &partID) {
+bool LTR303::getPartID(byte &partID) {
 	// Gets the part number ID and revision ID of the chip
 	// Default value is 0x0A
 	// part number ID = 0x0A (default)
@@ -236,7 +236,7 @@ boolean LTR303::getPartID(byte &partID) {
 	return(readByte(LTR303_PART_ID, partID));
 }
 
-boolean LTR303::getManufacID(byte &manufacID) {
+bool LTR303::getManufacID(byte &manufacID) {
 	// Gets the Manufacturers ID
 	// Default value is 0x05
 	// Returns true (1) if successful, false (0) if there was an I2C error
@@ -245,7 +245,7 @@ boolean LTR303::getManufacID(byte &manufacID) {
 	return(readByte(LTR303_MANUFAC_ID, manufacID));
 }
 
-boolean LTR303::getData(unsigned int &CH0, unsigned int &CH1) {
+bool LTR303::getData(unsigned int &CH0, unsigned int &CH1) {
 	// Gets the 16-bit channel 0 and channel 1 data
 	// Default value of both channels is 0x00
 	// Returns true (1) if successful, false (0) if there was an I2C error
@@ -257,8 +257,8 @@ boolean LTR303::getData(unsigned int &CH0, unsigned int &CH1) {
 	return(readUInt(LTR303_DATA_CH1_0,CH1) && readUInt(LTR303_DATA_CH0_0,CH0));
 }
 
-boolean LTR303::getStatus(boolean &valid, byte &gain,
-	boolean &intrStatus, boolean &dataStatus
+bool LTR303::getStatus(bool &valid, byte &gain,
+	bool &intrStatus, bool &dataStatus
 ) {
 	// Gets the status information of LTR303
 	// Default value is 0x00
@@ -304,7 +304,7 @@ boolean LTR303::getStatus(boolean &valid, byte &gain,
 	return(false);
 }
 
-boolean LTR303::setInterruptControl(boolean intrMode, boolean polarity = false) {
+bool LTR303::setInterruptControl(bool intrMode, bool polarity = false) {
 	// Sets up interrupt operations
 	// Default value is 0x08
 	// If intrMode = false(0), INT pin is inactive (default)
@@ -324,7 +324,7 @@ boolean LTR303::setInterruptControl(boolean intrMode, boolean polarity = false) 
 	return(writeByte(LTR303_INTERRUPT, intrControl));
 }
 
-boolean LTR303::getInterruptControl(boolean polarity, boolean intrMode) {
+bool LTR303::getInterruptControl(bool polarity, bool intrMode) {
 	// Sets up interrupt operations
 	// Default value is 0x08
 	// If polarity = false(0), INT pin is active at logic 0 (default)
@@ -352,7 +352,7 @@ boolean LTR303::getInterruptControl(boolean polarity, boolean intrMode) {
 	return(false);
 }
 
-boolean LTR303::setThreshold(unsigned int upperLimit, unsigned int lowerLimit) {
+bool LTR303::setThreshold(unsigned int upperLimit, unsigned int lowerLimit) {
 	// Sets the upper limit and lower limit of the threshold
 	// Default value of upper threshold is 0xFF and lower threshold is 0x00
 	// Both the threshold are 16-bit integer values
@@ -362,7 +362,7 @@ boolean LTR303::setThreshold(unsigned int upperLimit, unsigned int lowerLimit) {
 	return(writeUInt(LTR303_THRES_UP_0,upperLimit) && writeUInt(LTR303_THRES_LOW_0,lowerLimit));
 }
 
-boolean LTR303::getThreshold(unsigned int &upperLimit, unsigned int &lowerLimit) {
+bool LTR303::getThreshold(unsigned int &upperLimit, unsigned int &lowerLimit) {
 	// Gets the upper limit and lower limit of the threshold
 	// Default value of upper threshold is 0xFF and lower threshold is 0x00
 	// Both the threshold are 16-bit integer values
@@ -372,7 +372,7 @@ boolean LTR303::getThreshold(unsigned int &upperLimit, unsigned int &lowerLimit)
 	return(readUInt(LTR303_THRES_UP_0,upperLimit) && readUInt(LTR303_THRES_LOW_0,lowerLimit));		
 }
 
-boolean LTR303::setIntrPersist(byte persist) {
+bool LTR303::setIntrPersist(byte persist) {
 	// Sets the interrupt persistance i.e. controls the N number of times the 
 	// measurement data is outside the range defined by upper and lower threshold
 	// Default value is 0x00
@@ -403,7 +403,7 @@ boolean LTR303::setIntrPersist(byte persist) {
 	return(writeByte(LTR303_INTR_PERS,persist));
 }
 
-boolean LTR303::getIntrPersist(byte &persist) {
+bool LTR303::getIntrPersist(byte &persist) {
 	// Gets the interrupt persistance i.e. controls the N number of times the measurement data is outside the range defined by upper and lower threshold
 	// Default value is 0x00
 	// If persist = 0, every sensor value out of threshold range (default)
@@ -429,7 +429,7 @@ boolean LTR303::getIntrPersist(byte &persist) {
 }
 
 // Get the right lux algorithm
-boolean LTR303::getLux(byte gain, unsigned char IntTime, unsigned int CH0, unsigned int CH1, double &lux) {
+bool LTR303::getLux(byte gain, unsigned char IntTime, unsigned int CH0, unsigned int CH1, double &lux) {
 	// Convert raw data to lux
 	// gain: 0 (1X) or 7 (96X), see getControl()
 	// integrationTime: integration time in ms, from getMeasurementRate()
@@ -550,7 +550,7 @@ byte LTR303::getError(void) {
 
 // Private functions:
 
-boolean LTR303::readByte(byte address, byte &value) {
+bool LTR303::readByte(byte address, byte &value) {
 	// Reads a byte from a LTR303 address
 	// Address: LTR303 address (0 to 15)
 	// Value will be set to stored byte
@@ -581,7 +581,7 @@ boolean LTR303::readByte(byte address, byte &value) {
 	return(false);
 }
 
-boolean LTR303::writeByte(byte address, byte value) {
+bool LTR303::writeByte(byte address, byte value) {
 	// Write a byte to a LTR303 address
 	// Address: LTR303 address (0 to 15)
 	// Value: byte to write to address
@@ -599,7 +599,7 @@ boolean LTR303::writeByte(byte address, byte value) {
 	return(false);
 }
 
-boolean LTR303::readUInt(byte address, unsigned int &value) {
+bool LTR303::readUInt(byte address, unsigned int &value) {
 	// Reads an unsigned integer (16 bits) from a LTR303 address (low byte first)
 	// Address: LTR303 address (0 to 15), low byte first
 	// Value will be set to stored unsigned integer
@@ -635,7 +635,7 @@ boolean LTR303::readUInt(byte address, unsigned int &value) {
 	return(false);
 }
 
-boolean LTR303::writeUInt(byte address, unsigned int value) {
+bool LTR303::writeUInt(byte address, unsigned int value) {
 	// Write an unsigned integer (16 bits) to a LTR303 address (low byte first)
 	// Address: LTR303 address (0 to 15), low byte first
 	// Value: unsigned int to write to address

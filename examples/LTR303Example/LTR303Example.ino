@@ -181,7 +181,7 @@ void loop() {
     // reduce the integration time and/or gain.
   
     double lux;    // Resulting lux value
-    boolean good;  // True if neither sensor is saturated
+    bool good;  // True if neither sensor is saturated
     
     // Perform lux calculation:
 
