@@ -567,7 +567,7 @@ bool LTR303::readByte(byte address, byte &value) {
 	{
 		long timeout = millis() + 100;
 
-		Wire.requestFrom(_i2c_address,1);
+		Wire.requestFrom(_i2c_address, (byte)1);
 		while( millis() < timeout ) {
 			if( Wire.available() < 1 ) {
 				delay(5);
@@ -618,7 +618,7 @@ bool LTR303::readUInt(byte address, unsigned int &value) {
 	{
 		long timeout = millis() + 100;
 
-		Wire.requestFrom(_i2c_address,2);
+		Wire.requestFrom(_i2c_address, (byte)2);
 		while( millis() < timeout ) {
 			if( Wire.available() < 2 ) {
 				delay(5);
