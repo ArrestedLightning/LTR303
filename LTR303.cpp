@@ -287,7 +287,7 @@ bool LTR303::getStatus(bool &valid, byte &gain,
 	// Reading the status byte
 	if(readByte(LTR303_STATUS, status)) {
 		// Extract validity
-		valid = (status & 0x80) ? true : false;
+		valid = (status & 0x80) ? false : true;
 	
 		// Extract gain
 		gain = (status & 0x70) >> 4;
